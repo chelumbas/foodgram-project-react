@@ -1,8 +1,7 @@
-from django.contrib import admin
 from django.conf import settings
+from django.contrib import admin
 
-from .models import User, Subscription
-
+from .models import Subscription, User
 
 admin.site.empty_value_display = settings.DEFAULT_ADMIN_EMPTY_VALUE
 

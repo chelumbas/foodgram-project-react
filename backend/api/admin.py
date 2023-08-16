@@ -1,8 +1,7 @@
+from django.conf import settings
 from django.contrib import admin
 
-from django.conf import settings
-
-from .models import Tag, Ingredient, Recipe, ShoppingCart, Favorite
+from .models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
 
 admin.site.empty_value_display = settings.DEFAULT_ADMIN_EMPTY_VALUE
 

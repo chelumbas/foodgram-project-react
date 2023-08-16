@@ -1,11 +1,8 @@
 from django.db import models
 
-from .validators import (
-    validate_slug,
-    validate_recipe_min_time,
-    validate_ingredient_amount
-)
-from users.models import User
+from ..users.models import User
+from .validators import (validate_ingredient_amount, validate_recipe_min_time,
+                         validate_slug)
 
 
 class Tag(models.Model):

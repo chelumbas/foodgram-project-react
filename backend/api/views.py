@@ -1,42 +1,27 @@
-from djoser.views import UserViewSet
-from django.shortcuts import get_object_or_404
 from django.db.models import Sum
 from django.http.response import HttpResponse
+from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.viewsets import ModelViewSet
+from djoser.views import UserViewSet
 from rest_framework.decorators import action
-from rest_framework.permissions import (
-    AllowAny,
-    IsAuthenticated,
-    IsAuthenticatedOrReadOnly,
-    SAFE_METHODS
-)
+from rest_framework.permissions import (SAFE_METHODS, AllowAny,
+                                        IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT
+from rest_framework.viewsets import ModelViewSet
+from users.models import Subscription, User
 
-from users.models import User, Subscription
-from .models import (
-    Tag,
-    Ingredient,
-    Recipe,
-    RecipeIngredient,
-    ShoppingCart,
-    Favorite
-)
-from .serializers import (
-    TagsSerializer,
-    IngredientsSerializer,
-    FavoriteSerializer,
-    ShoppingCartSerializer,
-    DefaultUserSerializer,
-    SubscriptionSerializer,
-    SubscribeSerializer,
-    DefaultRecipeSerializer,
-    RecipeWriteSerializer
-)
-from .permissions import IsAuthorOrReadOnly
-from .filters import RecipeFilter, IngredienFilter
 from .custom_functions import generate_attachment
+from .filters import IngredienFilter, RecipeFilter
+from .models import (Favorite, Ingredient, Recipe, RecipeIngredient,
+                     ShoppingCart, Tag)
+from .permissions import IsAuthorOrReadOnly
+from .serializers import (DefaultRecipeSerializer, DefaultUserSerializer,
+                          FavoriteSerializer, IngredientsSerializer,
+                          RecipeWriteSerializer, ShoppingCartSerializer,
+                          SubscribeSerializer, SubscriptionSerializer,
+                          TagsSerializer)
 
 
 class UsersViewSet(UserViewSet):
