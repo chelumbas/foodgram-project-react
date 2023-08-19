@@ -3,6 +3,8 @@ from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
+from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
+                            ShoppingCart, Tag)
 from rest_framework.decorators import action
 from rest_framework.permissions import (SAFE_METHODS, AllowAny,
                                         IsAuthenticated,
@@ -14,8 +16,6 @@ from users.models import Subscription, User
 
 from .custom_functions import generate_attachment
 from .filters import IngredienFilter, RecipeFilter
-from .models import (Favorite, Ingredient, Recipe, RecipeIngredient,
-                     ShoppingCart, Tag)
 from .permissions import IsAuthorOrReadOnly
 from .serializers import (DefaultRecipeSerializer, DefaultUserSerializer,
                           FavoriteSerializer, IngredientsSerializer,

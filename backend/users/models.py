@@ -11,10 +11,6 @@ class User(AbstractUser):
         unique=True,
         validators=(validate_username,)
     )
-    password = models.CharField(
-        verbose_name='Пароль',
-        max_length=150
-    )
     email = models.EmailField(
         verbose_name='Адрес электронной почты',
         max_length=254,
@@ -30,7 +26,7 @@ class User(AbstractUser):
     )
 
     class Meta:
-        ordering = ['-pk']
+        ordering = ('-pk',)
 
     def __str__(self):
         return str(self.username)

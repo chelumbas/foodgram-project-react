@@ -2,15 +2,14 @@ import base64
 
 from django.core.files.base import ContentFile
 from djoser.serializers import UserCreateSerializer, UserSerializer
+from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
+                            ShoppingCart, Tag)
 from rest_framework.serializers import (CharField, ImageField, IntegerField,
                                         ModelSerializer,
                                         PrimaryKeyRelatedField,
                                         SerializerMethodField)
 from rest_framework.validators import UniqueTogetherValidator
 from users.models import Subscription, User
-
-from .models import (Favorite, Ingredient, Recipe, RecipeIngredient,
-                     ShoppingCart, Tag)
 
 
 class DefaultUserSerializer(UserSerializer):
@@ -75,10 +74,9 @@ class SubscriptionSerializer(DefaultUserSerializer):
     def get_recipes(self, an_object):
         request = self.context.get('request')
         recipes_limit = request.query_params.get('recipes_limit')
+        recipes = an_object.recipes.all()
         if recipes_limit:
-            recipes = an_object.recipes.all()[:int(recipes_limit)]
-        else:
-            recipes = an_object.recipes.all()
+            recipes = recipes[:int(recipes_limit)]
         return RecipeShortSerializer(
             recipes,
             many=True,
@@ -199,19 +197,18 @@ class DefaultRecipeSerializer(ModelSerializer):
             'cooking_time'
         )
 
-    def get_is_favorited(self, an_object):
+    def _is_auth_and_exists_in_model(self, model, an_object):
         user = self.context.get('request').user
-        return user.is_authenticated and Favorite.objects.filter(
+        return user.is_authenticated and model.objects.filter(
             user=user,
             recipe=an_object
         ).exists()
 
+    def get_is_favorited(self, an_object):
+        return self._is_auth_and_exists_in_model(Favorite, an_object)
+
     def get_is_in_shopping_cart(self, an_object):
-        user = self.context.get('request').user
-        return user.is_authenticated and ShoppingCart.objects.filter(
-            user=user,
-            recipe=an_object
-        ).exists()
+        return self._is_auth_and_exists_in_model(ShoppingCart, an_object)
 
 
 class IngredientAmountWriteSerializer(ModelSerializer):
